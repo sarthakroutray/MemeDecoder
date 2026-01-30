@@ -11,7 +11,7 @@ export default function MemeDecoder() {
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userInput, setUserInput] = useState<string>('');
   const [score, setScore] = useState<number>(0);
-  const [blurAmount, setBlurAmount] = useState<number>(8);
+  const [blurAmount, setBlurAmount] = useState<number>(4);
   const [revealedHints, setRevealedHints] = useState<number[]>([]);
   const [hintTimer, setHintTimer] = useState<number>(0);
   const [gameTimer, setGameTimer] = useState<number>(60);
@@ -117,7 +117,7 @@ export default function MemeDecoder() {
     setGameState('playing');
     setScore(0);
     setCurrentIndex(0);
-    setBlurAmount(25);
+    setBlurAmount(15);
     setRevealedHints([]);
     setHintTimer(0);
     setGameTimer(60);
@@ -142,7 +142,7 @@ export default function MemeDecoder() {
         setScore((prev) => prev + 10);
         setCurrentIndex((prev) => prev + 1);
         setUserInput('');
-        setBlurAmount(25); // Reset blur for next meme
+        setBlurAmount(15); // Reset blur for next meme
         setRevealedHints([]); // Reset hints for next meme
         setHintTimer(0); // Reset hint timer
       } else {
@@ -150,8 +150,8 @@ export default function MemeDecoder() {
         setGameState('won');
       }
     } else {
-      // Wrong - shake effect and reduce blur (minimum 8px)
-      setBlurAmount((prev) => Math.max(8, prev - 1));
+      // Wrong - shake effect and reduce blur (minimum 4px)
+      setBlurAmount((prev) => Math.max(4, prev - 1));
       const inputEl = document.getElementById('meme-input');
       if (inputEl) {
         inputEl.classList.add('animate-shake');
