@@ -170,7 +170,7 @@ export default function MemeDecoder() {
     return (
       <div style={{ display: 'flex', gap: '16px', flexWrap: 'wrap', justifyContent: 'center' }}>
         {words.map((word, wordIdx) => {
-          const wordSlots = word.split('').map((char, charIdx) => {
+          const wordSlots = word.split('').map((_char, charIdx) => {
             const normalized = normalize(currentMeme.answer);
             const userChar = userInput[globalCharIndex] || "";
             const isHinted = revealedHints.includes(globalCharIndex);
