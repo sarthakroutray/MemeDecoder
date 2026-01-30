@@ -121,6 +121,7 @@ export default function MemeDecoder() {
     setRevealedHints([]);
     setHintTimer(0);
     setGameTimer(60);
+    setUserInput('');
   };
 
   const normalize = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
