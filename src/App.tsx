@@ -116,7 +116,7 @@ export default function MemeDecoder() {
   const handleStart = () => {
     // Randomly select 4 memes
     const shuffled = [...memeData].sort(() => 0.5 - Math.random());
-    const selected = shuffled.slice(0, 4);
+    const selected = shuffled.slice(0, 10);
     setGameMemes(selected);
 
     setGameState('playing');
