@@ -4,10 +4,15 @@ import { Terminal, Scan, CheckCircle2, XCircle, Play, RotateCcw, User } from 'lu
 
 type GameState = 'signin' | 'start' | 'playing' | 'won' | 'lost';
 
+const ADMIN_PASSWORD = 'ACMADMIN123@'; // Change this to your desired password
+
 export default function MemeDecoder() {
   const [gameState, setGameState] = useState<GameState>('signin');
   const [username, setUsername] = useState<string>('');
   const [nameInput, setNameInput] = useState<string>('');
+  const [showPasswordDialog, setShowPasswordDialog] = useState<boolean>(false);
+  const [passwordInput, setPasswordInput] = useState<string>('');
+  const [passwordError, setPasswordError] = useState<boolean>(false);
   const [currentIndex, setCurrentIndex] = useState<number>(0);
   const [userInput, setUserInput] = useState<string>('');
   const [score, setScore] = useState<number>(0);
@@ -122,6 +127,25 @@ export default function MemeDecoder() {
     setHintTimer(0);
     setGameTimer(60);
     setUserInput('');
+    setShowPasswordDialog(false);
+    setPasswordInput('');
+    setPasswordError(false);
+  };
+
+  const handleRestartRequest = () => {
+    setShowPasswordDialog(true);
+    setPasswordInput('');
+    setPasswordError(false);
+  };
+
+  const handlePasswordSubmit = (e: React.FormEvent) => {
+    e.preventDefault();
+    if (passwordInput === ADMIN_PASSWORD) {
+      handleStart();
+    } else {
+      setPasswordError(true);
+      setTimeout(() => setPasswordError(false), 500);
+    }
   };
 
   const normalize = (str: string) => str.toLowerCase().replace(/[^a-z0-9]/g, '');
@@ -362,13 +386,47 @@ export default function MemeDecoder() {
                 FINAL SCORE: <span className="text-white font-bold">{score}</span>
               </p>
 
-              <button
-                onClick={handleStart}
-                className="px-8 py-3 bg-zinc-800 border border-zinc-600 hover:bg-zinc-700 hover:border-zinc-400 text-white transition-all uppercase tracking-widest flex items-center gap-2 mx-auto"
-              >
-                <RotateCcw className="w-4 h-4" />
-                Reboot System
-              </button>
+              {!showPasswordDialog ? (
+                <button
+                  onClick={handleRestartRequest}
+                  className="px-8 py-3 bg-zinc-800 border border-zinc-600 hover:bg-zinc-700 hover:border-zinc-400 text-white transition-all uppercase tracking-widest flex items-center gap-2 mx-auto"
+                >
+                  <RotateCcw className="w-4 h-4" />
+                  Request System Restart
+                </button>
+              ) : (
+                <div className="animate-fade-in">
+                  <p className="text-yellow-500 mb-4 text-sm uppercase tracking-wider">Admin Password Required</p>
+                  <form onSubmit={handlePasswordSubmit} className="space-y-4">
+                    <div className="relative">
+                      <input
+                        type="password"
+                        value={passwordInput}
+                        onChange={(e) => setPasswordInput(e.target.value)}
+                        placeholder="ENTER PASSWORD"
+                        className={`w-full px-4 py-3 bg-black border-2 ${passwordError ? 'border-red-500 animate-shake' : 'border-yellow-600'} text-yellow-400 placeholder-yellow-900/50 focus:border-yellow-500 focus:outline-none uppercase tracking-wider font-mono`}
+                        autoFocus
+                      />
+                      <div className="absolute top-0 right-0 h-full w-1 bg-yellow-500 animate-pulse"></div>
+                    </div>
+                    <div className="flex gap-4 justify-center">
+                      <button
+                        type="submit"
+                        className="px-6 py-2 bg-yellow-900/20 border border-yellow-500 hover:bg-yellow-500 hover:text-black transition-all uppercase tracking-wider font-bold"
+                      >
+                        Authorize
+                      </button>
+                      <button
+                        type="button"
+                        onClick={() => setShowPasswordDialog(false)}
+                        className="px-6 py-2 bg-zinc-800 border border-zinc-600 hover:bg-zinc-700 text-white transition-all uppercase tracking-wider"
+                      >
+                        Cancel
+                      </button>
+                    </div>
+                  </form>
+                </div>
+              )}
             </div>
           </div>
         )}
